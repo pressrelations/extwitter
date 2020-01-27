@@ -144,12 +144,13 @@ defmodule ExTwitter.API.Streaming do
             process_stream(processor, request_id, configs, acc)
 
           is_end_of_message(part) ->
-            message = Enum.reverse([part|acc])
-                      |> Enum.join("")
-                      |> __MODULE__.parse_tweet_message(configs)
-            if message != nil do
-              send processor, message
-            end
+            Enum.reverse([part | acc])
+            |> Enum.join("")
+            |> String.split(@crlf, trim: true)
+            |> Enum.map(& __MODULE__.parse_tweet_message(&1, configs))
+            |> Enum.filter(& !is_nil(&1))
+            |> Enum.map(& send processor, &1)
+
             process_stream(processor, request_id, configs, [])
 
           true ->
