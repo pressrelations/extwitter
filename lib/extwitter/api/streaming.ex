@@ -9,6 +9,7 @@ defmodule ExTwitter.API.Streaming do
   @default_stream_timeout 60_000
   @default_control_timeout 10_000
   @http_unauthorized 401
+  @crlf "\r\n"
 
   require Logger
 
