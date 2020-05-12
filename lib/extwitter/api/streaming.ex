@@ -112,7 +112,7 @@ defmodule ExTwitter.API.Streaming do
 
       {:error, {%Jason.DecodeError{} = error, _}} ->
         Logger.error "Couldn't decode message (#{inspect(error, limit: :infinity)})"
-        receive_next_tweet(nil, req, timeout)
+        receive_next_tweet(pid, req, timeout)
 
       {:error, message} ->
         Logger.error "Error returned, stopping stream (#{inspect(message)})."
